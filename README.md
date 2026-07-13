@@ -19,25 +19,49 @@ A Netflix-inspired web application built with React and powered by the TMDB API.
 
 ## 🚀 Getting Started
 
-Clone the repository:
+### 1. Clone the Repository
 
 ```bash
 git clone <repository-url>
+cd netflix-clone-mern
 ```
 
-Install dependencies:
+### 2. Install Dependencies
+
+**Backend**
 
 ```bash
+cd backend
 npm install
 ```
 
-Start the development server:
+**Frontend**
 
 ```bash
+cd ../netflix
+npm install
+```
+
+### 3. Start the Application
+
+**Start the Backend**
+
+```bash
+cd backend
+npm run dev
+```
+
+**Start the Frontend** (in a new terminal)
+
+```bash
+cd netflix
 npm start
 ```
 
----
+The frontend will be available at:
+
+```
+http://localhost:3000
 
 ## 🛠️ Built With
 
@@ -55,3 +79,4 @@ npm start
 ## 📄 License
 
 This project was completed as part of a technical interview assignment and showcases full-stack development, authentication, TMDB API integration, and UI/UX enhancements.
+```
