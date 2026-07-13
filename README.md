@@ -2,7 +2,7 @@
 
 A Netflix-inspired web application built with React and powered by the TMDB API. Users can explore trending movies and TV shows, search for titles, and watch official trailers through a clean and responsive interface.
 
-> **Disclaimer:** This project is developed for educational and portfolio purposes only. It does not host or stream copyrighted content. Movie information and trailers are provided by TMDB.
+> **Disclaimer:** This project was completed as part of a technical interview assignment. It is a Netflix-inspired application built for demonstration purposes only. It does not host or stream copyrighted content. Movie information and trailers are provided by TMDB.
 
 ---
 
@@ -52,12 +52,6 @@ npm start
 
 ---
 
-## 📷 Preview
-
-_Add screenshots or a demo GIF here._
-
----
-
 ## 📄 License
 
-This project is intended for educational and portfolio purposes only.
+This project was completed as part of a technical interview assignment and showcases full-stack development, authentication, TMDB API integration, and UI/UX enhancements.
