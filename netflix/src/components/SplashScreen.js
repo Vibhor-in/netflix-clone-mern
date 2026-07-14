@@ -1,110 +1,249 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { setShowSplash } from '../redux/userSlice';
-import { playNetflixSound } from '../utils/netflixSound';
+// import React, { useEffect, useState } from 'react';
+// import { useDispatch } from 'react-redux';
+// import { setShowSplash } from '../redux/userSlice';
+// import { playNetflixSound } from '../utils/netflixSound';
+
+// const SplashScreen = () => {
+//     const dispatch = useDispatch();
+//     const [phase, setPhase] = useState('enter'); // 'enter' | 'glow' | 'exit'
+
+//     useEffect(() => {
+//         let isMounted = true;
+
+//         const runSplash = async () => {
+//             // Phase 1: Letter scales in (already triggered by 'enter' state)
+//             // Wait a tiny bit for the CSS transition to kick in
+//             await delay(100);
+//             if (!isMounted) return;
+//             setPhase('glow');
+
+//             // Play the ta-dum sound and wait for it to finish
+//             await playNetflixSound();
+
+//             // Phase 2: After sound ends, start exit animation
+//             if (!isMounted) return;
+//             setPhase('exit');
+
+//             // Wait for exit animation to complete
+//             await delay(800);
+
+//             // Navigate to browse content
+//             if (isMounted) {
+//                 dispatch(setShowSplash(false));
+//             }
+//         };
+
+//         runSplash();
+
+//         return () => {
+//             isMounted = false;
+//         };
+//     }, [dispatch]);
+
+//     return (
+//         <div style={{
+//             position: 'fixed',
+//             inset: 0,
+//             zIndex: 9999,
+//             backgroundColor: '#000',
+//             display: 'flex',
+//             alignItems: 'center',
+//             justifyContent: 'center',
+//             opacity: phase === 'exit' ? 0 : 1,
+//             transition: 'opacity 0.7s ease-out',
+//         }}>
+//             {/* Ambient radial glow behind the letter */}
+//             <div style={{
+//                 position: 'absolute',
+//                 width: '500px',
+//                 height: '500px',
+//                 borderRadius: '50%',
+//                 background: 'radial-gradient(circle, rgba(229,9,20,0.25) 0%, rgba(229,9,20,0) 70%)',
+//                 opacity: phase === 'glow' ? 1 : 0,
+//                 transform: phase === 'glow' ? 'scale(1)' : 'scale(0.3)',
+//                 transition: 'opacity 1.2s ease-out, transform 1.5s ease-out',
+//             }} />
+
+//             {/* The "N" letter */}
+//             <div style={{
+//                 fontSize: '280px',
+//                 fontWeight: '900',
+//                 fontFamily: "'Bebas Neue', 'Arial Black', Impact, sans-serif",
+//                 color: '#e50914',
+//                 textShadow: phase === 'glow'
+//                     ? '0 0 40px rgba(229,9,20,0.6), 0 0 80px rgba(229,9,20,0.3), 0 0 120px rgba(229,9,20,0.15)'
+//                     : '0 0 0px rgba(229,9,20,0)',
+//                 transform: phase === 'enter'
+//                     ? 'scale(0.3)'
+//                     : phase === 'glow'
+//                         ? 'scale(1)'
+//                         : 'scale(1.15)',
+//                 opacity: phase === 'enter' ? 0 : 1,
+//                 transition: 'transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease-out, text-shadow 1.2s ease-out',
+//                 userSelect: 'none',
+//                 lineHeight: 1,
+//                 letterSpacing: '4px',
+//                 position: 'relative',
+//                 zIndex: 1,
+//             }}>
+//                 N
+//             </div>
+
+//             {/* Subtle horizontal light sweep */}
+//             <div style={{
+//                 position: 'absolute',
+//                 width: '400px',
+//                 height: '2px',
+//                 background: 'linear-gradient(90deg, transparent, rgba(229,9,20,0.5), transparent)',
+//                 opacity: phase === 'glow' ? 1 : 0,
+//                 transform: phase === 'glow' ? 'scaleX(1)' : 'scaleX(0)',
+//                 transition: 'opacity 0.8s ease-out 0.5s, transform 0.8s ease-out 0.5s',
+//             }} />
+//         </div>
+//     );
+// };
+
+// function delay(ms) {
+//     return new Promise(resolve => setTimeout(resolve, ms));
+// }
+
+// export default SplashScreen;
+
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { setShowSplash } from "../redux/userSlice";
+import { playNetflixSound } from "../utils/netflixSound";
 
 const SplashScreen = () => {
-    const dispatch = useDispatch();
-    const [phase, setPhase] = useState('enter'); // 'enter' | 'glow' | 'exit'
+  const dispatch = useDispatch();
+  const [phase, setPhase] = useState("enter");
 
-    useEffect(() => {
-        let isMounted = true;
+  useEffect(() => {
+    let mounted = true;
 
-        const runSplash = async () => {
-            // Phase 1: Letter scales in (already triggered by 'enter' state)
-            // Wait a tiny bit for the CSS transition to kick in
-            await delay(100);
-            if (!isMounted) return;
-            setPhase('glow');
+    const startSplash = async () => {
+      // Initial delay
+      await delay(200);
 
-            // Play the ta-dum sound and wait for it to finish
-            await playNetflixSound();
+      if (!mounted) return;
+      setPhase("glow");
 
-            // Phase 2: After sound ends, start exit animation
-            if (!isMounted) return;
-            setPhase('exit');
+      // Play Netflix sound
+      await playNetflixSound();
 
-            // Wait for exit animation to complete
-            await delay(800);
+      // Keep logo visible for a moment after sound
+      await delay(1000);
 
-            // Navigate to browse content
-            if (isMounted) {
-                dispatch(setShowSplash(false));
-            }
-        };
+      if (!mounted) return;
+      setPhase("exit");
 
-        runSplash();
+      // Exit animation
+      await delay(900);
 
-        return () => {
-            isMounted = false;
-        };
-    }, [dispatch]);
+      if (mounted) {
+        dispatch(setShowSplash(false));
+      }
+    };
 
-    return (
-        <div style={{
-            position: 'fixed',
-            inset: 0,
-            zIndex: 9999,
-            backgroundColor: '#000',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            opacity: phase === 'exit' ? 0 : 1,
-            transition: 'opacity 0.7s ease-out',
-        }}>
-            {/* Ambient radial glow behind the letter */}
-            <div style={{
-                position: 'absolute',
-                width: '400px',
-                height: '400px',
-                borderRadius: '50%',
-                background: 'radial-gradient(circle, rgba(229,9,20,0.25) 0%, rgba(229,9,20,0) 70%)',
-                opacity: phase === 'glow' ? 1 : 0,
-                transform: phase === 'glow' ? 'scale(1)' : 'scale(0.3)',
-                transition: 'opacity 1.2s ease-out, transform 1.5s ease-out',
-            }} />
+    startSplash();
 
-            {/* The "N" letter */}
-            <div style={{
-                fontSize: '180px',
-                fontWeight: '900',
-                fontFamily: "'Bebas Neue', 'Arial Black', Impact, sans-serif",
-                color: '#e50914',
-                textShadow: phase === 'glow'
-                    ? '0 0 40px rgba(229,9,20,0.6), 0 0 80px rgba(229,9,20,0.3), 0 0 120px rgba(229,9,20,0.15)'
-                    : '0 0 0px rgba(229,9,20,0)',
-                transform: phase === 'enter'
-                    ? 'scale(0.3)'
-                    : phase === 'glow'
-                        ? 'scale(1)'
-                        : 'scale(1.15)',
-                opacity: phase === 'enter' ? 0 : 1,
-                transition: 'transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease-out, text-shadow 1.2s ease-out',
-                userSelect: 'none',
-                lineHeight: 1,
-                letterSpacing: '4px',
-                position: 'relative',
-                zIndex: 1,
-            }}>
-                N
-            </div>
+    return () => {
+      mounted = false;
+    };
+  }, [dispatch]);
 
-            {/* Subtle horizontal light sweep */}
-            <div style={{
-                position: 'absolute',
-                width: '300px',
-                height: '2px',
-                background: 'linear-gradient(90deg, transparent, rgba(229,9,20,0.5), transparent)',
-                opacity: phase === 'glow' ? 1 : 0,
-                transform: phase === 'glow' ? 'scaleX(1)' : 'scaleX(0)',
-                transition: 'opacity 0.8s ease-out 0.5s, transform 0.8s ease-out 0.5s',
-            }} />
-        </div>
-    );
+  return (
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 9999,
+        background: "#000",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        opacity: phase === "exit" ? 0 : 1,
+        transition: "opacity 0.9s ease",
+      }}
+    >
+      {/* Background Glow */}
+      <div
+        style={{
+          position: "absolute",
+          width: "600px",
+          height: "600px",
+          borderRadius: "50%",
+          background:
+            "radial-gradient(circle, rgba(229,9,20,0.30) 0%, rgba(229,9,20,0.12) 35%, rgba(229,9,20,0) 75%)",
+          opacity: phase === "glow" ? 1 : 0,
+          transform: phase === "glow" ? "scale(1)" : "scale(0.5)",
+          transition: "opacity 1.2s ease, transform 1.5s ease",
+        }}
+      />
+
+      {/* Netflix N */}
+      <div
+        style={{
+          fontSize: "260px",
+          fontWeight: 900,
+          fontFamily: "'Bebas Neue','Arial Black',Impact,sans-serif",
+          color: "#E50914",
+          lineHeight: 1,
+          letterSpacing: "6px",
+          userSelect: "none",
+          position: "relative",
+          zIndex: 2,
+
+          opacity: phase === "enter" ? 0 : 1,
+
+          transform:
+            phase === "enter"
+              ? "scale(0.2)"
+              : phase === "glow"
+                ? "scale(1)"
+                : "scale(1.18)",
+
+          textShadow:
+            phase === "glow"
+              ? `
+                0 0 20px rgba(229,9,20,.9),
+                0 0 45px rgba(229,9,20,.7),
+                0 0 90px rgba(229,9,20,.45),
+                0 0 150px rgba(229,9,20,.25)
+              `
+              : "none",
+
+          transition:
+            "transform 1s cubic-bezier(.16,1,.3,1), opacity .6s ease, text-shadow 1.3s ease",
+        }}
+      >
+        N
+      </div>
+
+      {/* Light Sweep */}
+      <div
+        style={{
+          position: "absolute",
+          width: "420px",
+          height: "3px",
+          background:
+            "linear-gradient(90deg, transparent, rgba(255,255,255,.85), transparent)",
+
+          opacity: phase === "glow" ? 1 : 0,
+
+          transform: phase === "glow" ? "scaleX(1)" : "scaleX(0)",
+
+          transition: "opacity .8s ease .4s, transform .8s ease .4s",
+
+          zIndex: 1,
+        }}
+      />
+    </div>
+  );
 };
 
 function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export default SplashScreen;
