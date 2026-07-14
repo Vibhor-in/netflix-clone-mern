@@ -11,23 +11,23 @@ const SplashScreen = () => {
     let mounted = true;
 
     const startSplash = async () => {
-      // Initial delay
+      // Small initial delay
       await delay(200);
 
       if (!mounted) return;
+
       setPhase("glow");
 
       // Play intro sound
       await playNetflixSound();
 
-      // Small pause after sound
-      await delay(300);
-
       if (!mounted) return;
+
+      // Start fade out
       setPhase("exit");
 
-      // Exit animation
-      await delay(700);
+      // Wait for fade animation
+      await delay(900);
 
       if (mounted) {
         dispatch(setShowSplash(false));
@@ -52,7 +52,7 @@ const SplashScreen = () => {
         alignItems: "center",
         justifyContent: "center",
         opacity: phase === "exit" ? 0 : 1,
-        transition: "opacity 0.9s ease",
+        transition: "opacity .9s ease",
       }}
     >
       {/* Background Glow */}
@@ -63,9 +63,9 @@ const SplashScreen = () => {
           height: "600px",
           borderRadius: "50%",
           background:
-            "radial-gradient(circle, rgba(229,9,20,0.30) 0%, rgba(229,9,20,0.12) 35%, rgba(229,9,20,0) 75%)",
+            "radial-gradient(circle, rgba(229,9,20,.30) 0%, rgba(229,9,20,.12) 35%, rgba(229,9,20,0) 75%)",
           opacity: phase === "glow" ? 1 : 0,
-          transform: phase === "glow" ? "scale(1)" : "scale(0.5)",
+          transform: phase === "glow" ? "scale(1)" : "scale(.5)",
           transition: "opacity 1.2s ease, transform 1.5s ease",
         }}
       />
@@ -87,7 +87,7 @@ const SplashScreen = () => {
 
           transform:
             phase === "enter"
-              ? "scale(0.2)"
+              ? "scale(.2)"
               : phase === "glow"
                 ? "scale(1)"
                 : "scale(1.18)",
@@ -117,13 +117,9 @@ const SplashScreen = () => {
           height: "3px",
           background:
             "linear-gradient(90deg, transparent, rgba(255,255,255,.85), transparent)",
-
           opacity: phase === "glow" ? 1 : 0,
-
           transform: phase === "glow" ? "scaleX(1)" : "scaleX(0)",
-
           transition: "opacity .8s ease .4s, transform .8s ease .4s",
-
           zIndex: 1,
         }}
       />
