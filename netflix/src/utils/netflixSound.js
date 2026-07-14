@@ -102,24 +102,39 @@
 //   });
 // }
 
+// let audio;
+
+// export function playNetflixSound() {
+//   return new Promise((resolve) => {
+//     if (!audio) {
+//       audio = new Audio("/netflix-intro.mp3");
+//       audio.preload = "auto";
+//       audio.volume = 0.8;
+//     }
+
+//     audio.pause();
+//     audio.currentTime = 0;
+
+//     audio.onended = () => resolve();
+
+//     audio.play().catch((err) => {
+//       console.error(err);
+//       resolve();
+//     });
+//   });
+// }
+
 let audio;
 
 export function playNetflixSound() {
-  return new Promise((resolve) => {
-    if (!audio) {
-      audio = new Audio("/netflix-intro.mp3");
-      audio.preload = "auto";
-      audio.volume = 0.8;
-    }
+  console.log("PLAY SOUND");
 
-    audio.pause();
-    audio.currentTime = 0;
+  if (!audio) {
+    audio = new Audio("/netflix-intro.mp3");
+    audio.volume = 1;
+  }
 
-    audio.onended = () => resolve();
+  audio.currentTime = 0;
 
-    audio.play().catch((err) => {
-      console.error(err);
-      resolve();
-    });
-  });
+  return audio.play();
 }
