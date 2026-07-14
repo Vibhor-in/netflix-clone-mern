@@ -5,12 +5,8 @@ import cookieParser from "cookie-parser";
 import userRoute from "./routes/userRoute.js";
 import cors from "cors";
 
-// Load environment variables
-dotenv.config({
-  path: ".env",
-});
+dotenv.config();
 
-// Connect to MongoDB
 databaseConnection();
 
 const app = express();
@@ -20,21 +16,41 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
-const corsOptions = {
-  origin: [
-    "http://localhost:3000",
-    "https://netflix-clone-mern-6u9y.vercel.app",
-    "https://netflix-clone-mern-6u9y-1f07r3rap.vercel.app",
-  ],
-  credentials: true,
-};
+// Allowed Origins
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://netflix-clone-mern-6u9y.vercel.app",
+];
 
-app.use(cors(corsOptions));
+// CORS
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Postman ya direct requests
+      if (!origin) return callback(null, true);
+
+      // Localhost aur production domain allow
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      // Vercel Preview URLs allow
+      if (
+        origin.endsWith(".vercel.app") &&
+        origin.includes("netflix-clone-mern-6u9y")
+      ) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Not allowed by CORS"));
+    },
+    credentials: true,
+  }),
+);
 
 // Routes
 app.use("/api/v1/user", userRoute);
 
-// Start Server
 const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, () => {
